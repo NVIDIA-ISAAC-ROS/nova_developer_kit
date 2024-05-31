@@ -1,0 +1,53 @@
+repositories:
+  isaac_perceptor:
+    type: git
+    url: https://github.com/NVIDIA-ISAAC-ROS/isaac_perceptor.git
+    version: main
+  isaac_ros_argus_camera:
+    type: git
+    url: https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_argus_camera.git
+    version: main
+  isaac_ros_depth_segmentation:
+    type: git
+    url: https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_depth_segmentation.git
+    version: main
+  isaac_ros_dnn_inference:
+    type: git
+    url: https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_dnn_inference.git
+    version: main
+  isaac_ros_dnn_stereo_depth:
+    type: git
+    url: https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_dnn_stereo_depth.git
+    version: main
+  isaac_ros_freespace_segmentation:
+    type: git
+    url: https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_freespace_segmentation.git
+    version: main
+  isaac_ros_image_pipeline:
+    type: git
+    url: https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_image_pipeline.git
+    version: main
+  isaac_ros_image_segmentation:
+    type: git
+    url: https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_image_segmentation.git
+    version: main
+  isaac_ros_nitros:
+    type: git
+    url: https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_nitros.git
+    version: main
+  isaac_ros_nova:
+    type: git
+    url: https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_nova.git
+    version: main
+  isaac_ros_nvblox:
+    type: git
+    url: https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_nvblox.git
+    version: main
+  isaac_ros_visual_slam:
+    type: git
+    url: https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_visual_slam.git
+    version: main
+  magic_enum:
+    type: git
+    url: https://github.com/Neargye/magic_enum.git
+    version: master

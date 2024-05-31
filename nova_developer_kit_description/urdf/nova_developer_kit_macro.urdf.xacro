@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<!--
+Copyright (c) 2024, NVIDIA CORPORATION. All rights reserved.
+
+NVIDIA CORPORATION and its licensors retain all intellectual property
+and proprietary rights in and to this software, related documentation
+and any modifications thereto. Any use, reproduction, disclosure or
+distribution of this software and related documentation without an express
+license agreement from NVIDIA CORPORATION is strictly prohibited.
+-->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!--
+  Definition of the nova_developer_kit macro
+
+  Parameters:
+    - origin: Origin of the transformation connecting the root of this macro with parent link.
+    - name: Name of the Nova Dev Kit. Default value: "nova_developer_kit" leads to the following
+            links nova_developer_kit_link, nova_developer_kit_mount, etc.
+    - parent: Parent link where the root of this macro will be connected with a joint.
+              Default value: base_link
+    - mount_is_root: Flag identifying the root link. If true, root is _mount, othewise is _link.
+    - front_hawk_name: Name of the front HAWK camera. Default value: "front_stereo".
+    - left_hawk_name: Name of the front HAWK camera. Default value: "left_stereo".
+    - right_hawk_name: Name of the front HAWK camera. Default value: "right_stereo".
+    - front_owl_name: Name of the front OWL camera. Default value: "front_fisheye".
+    - left_owl_name: Name of the front OWL camera. Default value: "left_fisheye".
+    - right_owl_name: Name of the front OWL camera. Default value: "right_fisheye".
+  -->
+  <!-- TODO: add argument name for the kit -->
+  <xacro:macro name="nova_developer_kit" params="*origin
+    name=nova_developer_kit parent=base_link mount_is_root:=false
+    front_hawk_name=front_stereo left_hawk_name=left_stereo right_hawk_name=right_stereo
+    front_owl_name=front_fisheye left_owl_name=left_fisheye right_owl_name=right_fisheye">
+
+    <!-- Includes -->
+    <xacro:include filename="$(find hawk_description)/urdf/hawk_macro.urdf.xacro"/>
+    <xacro:include filename="$(find owl_description)/urdf/owl_macro.urdf.xacro"/>
+
+    <!-- Constants -->
+    <xacro:property name="M_PI" value="3.1415926535897931"/>
+    <xacro:property name="mount_offset_x" value="0.09"/>
+    <xacro:property name="mount_offset_y" value="0.0"/>
+    <xacro:property name="mount_offset_z" value="0.006"/>
+
+    <!-- Platform Structure -->
+    <!-- Main link of de Nova DevKit: Origin is at center-front of the module -->
+    <link name="${name}_link"/>
+
+    <!-- Nova DevKit mounting point: Center of the lower plate  -->
+    <link name="${name}_mount">
+      <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <geometry>
+          <mesh filename="package://nova_developer_kit_description/meshes/nova_developer_kit.obj"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <geometry>
+          <mesh filename="package://nova_developer_kit_description/meshes/nova_developer_kit.obj"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <!-- Joints connecting Nova Dev Kit origin to mount, and to the parent provided as argument  -->
+    <xacro:if value="${mount_is_root}">
+      <xacro:property name="root_link" value="${name}_mount"/>
+      <joint name="${name}_mount_joint" type="fixed">
+        <origin xyz="${mount_offset_x} ${mount_offset_y} ${mount_offset_z}" rpy="0.0 0.0 0.0"/>
+        <parent link="${name}_mount"/>
+        <child link="${name}_link"/>
+      </joint>
+    </xacro:if>
+
+    <xacro:unless value="${mount_is_root}">
+      <xacro:property name="root_link" value="${name}_link"/>
+      <joint name="${name}_mount_joint" type="fixed">
+        <origin xyz="${-mount_offset_x} ${-mount_offset_y} ${-mount_offset_z}" rpy="0.0 0.0 0.0"/>
+        <parent link="${name}_link"/>
+        <child link="${name}_mount"/>
+      </joint>
+    </xacro:unless>
+
+    <joint name="${name}_joint" type="fixed">
+      <xacro:insert_block name="origin"/>
+      <parent link="${parent}"/>
+      <child link="${root_link}"/>
+    </joint>
+
+    <!-- Stereo cameras  -->
+    <xacro:hawk_camera name="${front_hawk_name}" parent="${name}_link">
+      <origin xyz="-0.016000 0.075000 0.012500" rpy="0.0 0.0 0.0"/>
+    </xacro:hawk_camera>
+
+    <xacro:hawk_camera name="${left_hawk_name}" parent="${name}_link">
+      <origin xyz="-0.165000 0.106000 0.012500" rpy="0.0 0.0 ${M_PI/2}"/>
+    </xacro:hawk_camera>
+
+    <xacro:hawk_camera name="${right_hawk_name}" parent="${name}_link">
+      <origin xyz="-0.015000 -0.106000 0.012500" rpy="0.0 0.0 ${-M_PI/2}"/>
+    </xacro:hawk_camera>
+
+    <!-- Fisheye cameras  -->
+    <xacro:owl_camera name="${front_owl_name}" parent="${name}_link">
+      <origin xyz="-0.010000 0.000000 0.038000" rpy="0.0 0.0 0.0"/>
+    </xacro:owl_camera>
+
+    <xacro:owl_camera name="${left_owl_name}" parent="${name}_link">
+      <origin xyz="-0.090000 0.112000 0.038000" rpy="0.0 0.0 ${M_PI/2}"/>
+    </xacro:owl_camera>
+
+    <xacro:owl_camera name="${right_owl_name}" parent="${name}_link">
+      <origin xyz="-0.090000 -0.112000 0.038000" rpy="0.0 0.0 ${-M_PI/2}"/>
+    </xacro:owl_camera>
+
+  </xacro:macro>
+</robot>
