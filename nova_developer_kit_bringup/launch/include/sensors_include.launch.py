@@ -15,11 +15,11 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-from isaac_ros_launch_utils.all_types import *
 import isaac_ros_launch_utils as lu
+import launch_utils.all_types as lut
 
 
-def generate_launch_description() -> LaunchDescription:
+def generate_launch_description() -> lut.LaunchDescription:
     args = lu.ArgumentContainer()
     args.add_arg('rosbag')
     args.add_arg('enabled_stereo_cameras')
@@ -38,7 +38,7 @@ def generate_launch_description() -> LaunchDescription:
                 'enable_3d_lidar': False,
                 'enabled_stereo_cameras': args.enabled_stereo_cameras,
             },
-            condition=IfCondition(lu.is_valid(args.rosbag)),
+            condition=lut.IfCondition(lu.is_valid(args.rosbag)),
         ))
 
     # Sensor data from physical sensor drivers.
@@ -51,13 +51,13 @@ def generate_launch_description() -> LaunchDescription:
                 'enabled_2d_lidars': '',
                 'enabled_stereo_cameras': args.enabled_stereo_cameras,
             },
-            condition=UnlessCondition(lu.is_valid(args.rosbag)),
+            condition=lut.UnlessCondition(lu.is_valid(args.rosbag)),
         ))
     actions.append(
         lu.include(
             'nova_developer_kit_description',
             'launch/nova_developer_kit_description.launch.py',
-            condition=UnlessCondition(lu.is_valid(args.rosbag)),
+            condition=lut.UnlessCondition(lu.is_valid(args.rosbag)),
         ))
 
     # Visualization.
@@ -67,4 +67,4 @@ def generate_launch_description() -> LaunchDescription:
             'launch/tools/visualization.launch.py',
             launch_arguments={'enable_human_segmentation': args.enable_human_segmentation}))
 
-    return LaunchDescription(actions)
+    return lut.LaunchDescription(actions)
