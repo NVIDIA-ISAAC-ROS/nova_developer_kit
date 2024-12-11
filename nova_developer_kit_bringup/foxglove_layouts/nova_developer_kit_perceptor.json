@@ -3,13 +3,13 @@
     "3D!pkwsig": {
       "cameraState": {
         "perspective": true,
-        "distance": 5.547791462416275,
-        "phi": 66.31869920457885,
-        "thetaOffset": 91.56089609591699,
+        "distance": 5.839780486753937,
+        "phi": 66.31869920457889,
+        "thetaOffset": 91.56089609591737,
         "targetOffset": [
-          1.4519825693569217,
-          -0.19168891677241376,
-          -7.209386411596498e-16
+          1.3759892372413398,
+          -0.05553825129053335,
+          -7.215336567244841e-16
         ],
         "target": [
           0,
@@ -293,11 +293,14 @@
         "/unet/colored_segmentation_mask": {
           "visible": true
         },
-        "/nvblox_human_node/color_layer": {
+        "/nvblox_node/color_layer": {
           "visible": true
         },
-        "/nvblox_human_node/human_voxels": {
+        "/nvblox_node/human_voxels": {
           "visible": true
+        },
+        "/initialpose": {
+          "visible": false
         }
       },
       "layers": {},
@@ -311,54 +314,6 @@
         "poseEstimateThetaDeviation": 0.26179939
       },
       "imageMode": {}
-    },
-    "Image!q55ga8": {
-      "cameraState": {
-        "distance": 20,
-        "perspective": true,
-        "phi": 60,
-        "target": [
-          0,
-          0,
-          0
-        ],
-        "targetOffset": [
-          0,
-          0,
-          0
-        ],
-        "targetOrientation": [
-          0,
-          0,
-          0,
-          1
-        ],
-        "thetaOffset": 45,
-        "fovy": 45,
-        "near": 0.5,
-        "far": 5000
-      },
-      "followMode": "follow-pose",
-      "scene": {
-        "transforms": {
-          "showLabel": true
-        }
-      },
-      "transforms": {},
-      "topics": {},
-      "layers": {},
-      "publish": {
-        "type": "point",
-        "poseTopic": "/move_base_simple/goal",
-        "pointTopic": "/clicked_point",
-        "poseEstimateTopic": "/initialpose",
-        "poseEstimateXDeviation": 0.5,
-        "poseEstimateYDeviation": 0.5,
-        "poseEstimateThetaDeviation": 0.26179939
-      },
-      "imageMode": {
-        "imageTopic": "/front_stereo_camera/left/image_resized_grayscale"
-      }
     }
   },
   "globalVariables": {},
@@ -366,10 +321,5 @@
   "playbackConfig": {
     "speed": 1
   },
-  "layout": {
-    "first": "3D!pkwsig",
-    "second": "Image!q55ga8",
-    "direction": "column",
-    "splitPercentage": 65.66940912490651
-  }
+  "layout": "3D!pkwsig"
 }

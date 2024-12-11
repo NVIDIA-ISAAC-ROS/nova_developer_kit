@@ -26,7 +26,6 @@ license agreement from NVIDIA CORPORATION is strictly prohibited.
     - left_owl_name: Name of the front OWL camera. Default value: "left_fisheye".
     - right_owl_name: Name of the front OWL camera. Default value: "right_fisheye".
   -->
-  <!-- TODO: add argument name for the kit -->
   <xacro:macro name="nova_developer_kit" params="*origin
     name=nova_developer_kit parent=base_link mount_is_root:=false
     front_hawk_name=front_stereo left_hawk_name=left_stereo right_hawk_name=right_stereo
