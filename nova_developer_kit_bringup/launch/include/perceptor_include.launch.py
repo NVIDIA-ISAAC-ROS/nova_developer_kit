@@ -18,35 +18,7 @@
 # flake8: noqa: F403,F405
 import isaac_ros_launch_utils as lu
 from isaac_ros_launch_utils.all_types import *
-
-# Camera config string is a subset of:
-# - driver,rectify,resize,ess_full,ess_light,ess_skip_frames,cuvslam,nvblox
-perceptor_configurations = {
-    'front_configuration': {
-        'front_stereo_camera': 'driver,rectify,resize,ess_full,cuvslam,nvblox',
-        'back_stereo_camera': '',
-        'left_stereo_camera': '',
-        'right_stereo_camera': '',
-    },
-    'front_people_configuration': {
-        'front_stereo_camera': 'driver,rectify,resize,ess_full,cuvslam,nvblox_people',
-        'back_stereo_camera': '',
-        'left_stereo_camera': '',
-        'right_stereo_camera': '',
-    },
-    'front_left_right_configuration': {
-        'front_stereo_camera': 'driver,rectify,resize,ess_full,cuvslam,nvblox',
-        'back_stereo_camera': '',
-        'left_stereo_camera': 'driver,rectify,resize,ess_light,ess_skip_frames,cuvslam,nvblox',
-        'right_stereo_camera': 'driver,rectify,resize,ess_light,ess_skip_frames,cuvslam,nvblox',
-    },
-    'front_left_right_people_configuration': {
-        'front_stereo_camera': 'driver,rectify,resize,ess_full,cuvslam,nvblox_people',
-        'back_stereo_camera': '',
-        'left_stereo_camera': 'driver,rectify,resize,ess_light,ess_skip_frames,cuvslam,nvblox',
-        'right_stereo_camera': 'driver,rectify,resize,ess_light,ess_skip_frames,cuvslam,nvblox',
-    },
-}
+import isaac_ros_perceptor_python_utils.launch_utils as pu
 
 
 def generate_launch_description() -> LaunchDescription:
@@ -54,16 +26,27 @@ def generate_launch_description() -> LaunchDescription:
 
     # String specifying the stereo camera configuration.
     args.add_arg('stereo_camera_configuration')
+    args.add_arg('nvblox_global_frame', 'odom')
+    args.add_arg('vslam_map_frame', 'map')
+    args.add_arg('vslam_odom_frame', 'odom')
+    args.add_arg('vslam_image_qos')
+    args.add_arg('disable_cuvslam', False)
+    args.add_arg('disable_nvblox', False)
+    args.add_arg('disable_vgl', True)
+    args.add_arg('nvblox_param_filename', 'params/nvblox_perceptor.yaml')
+    args.add_arg('nvblox_after_shutdown_map_save_path', '')
+    args.add_arg('is_sim', False)
+    actions = args.get_launch_actions()
 
-    perceptor_configuration = lu.get_dict_value(str(perceptor_configurations),
-                                                args.stereo_camera_configuration)
+    perceptor_configuration, loggings = pu.load_perceptor_configuration(
+        args.stereo_camera_configuration, args.disable_cuvslam, args.disable_nvblox, args.disable_vgl)
+    actions.extend(loggings)
 
     enabled_stereo_cameras_drivers = lu.get_keys_with_substring_in_value(
         perceptor_configuration, 'driver')
     enable_people_segmentation = lu.dict_values_contain_substring(perceptor_configuration,
                                                                   'nvblox_people')
 
-    actions = args.get_launch_actions()
     actions.append(
         lu.include(
             'nova_developer_kit_bringup',
@@ -78,7 +61,16 @@ def generate_launch_description() -> LaunchDescription:
         lu.include(
             'isaac_ros_perceptor_bringup',
             'launch/perceptor_general.launch.py',
-            launch_arguments={'perceptor_configuration': perceptor_configuration},
+            launch_arguments={
+                'perceptor_configuration': perceptor_configuration,
+                'nvblox_global_frame': args.nvblox_global_frame,
+                'vslam_odom_frame': args.vslam_odom_frame,
+                'vslam_map_frame': args.vslam_map_frame,
+                'nvblox_param_filename': args.nvblox_param_filename,
+                'nvblox_after_shutdown_map_save_path': args.nvblox_after_shutdown_map_save_path,
+                'vslam_image_qos': args.vslam_image_qos,
+                'is_sim': args.is_sim,
+            },
         ))
 
     return LaunchDescription(actions)

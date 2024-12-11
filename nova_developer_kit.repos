@@ -27,6 +27,10 @@ repositories:
     type: git
     url: https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_image_pipeline.git
     version: main
+  isaac_ros_compression:
+    type: git
+    url: https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_compression.git
+    version: main
   isaac_ros_image_segmentation:
     type: git
     url: https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_image_segmentation.git
@@ -47,7 +51,11 @@ repositories:
     type: git
     url: https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_visual_slam.git
     version: main
+  isaac_ros_mapping_and_localization:
+    type: git
+    url: https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_mapping_and_localization.git
+    version: main
   magic_enum:
     type: git
     url: https://github.com/Neargye/magic_enum.git
-    version: master
+    version: v0.9.6
